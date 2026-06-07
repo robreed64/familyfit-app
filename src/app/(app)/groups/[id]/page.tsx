@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,7 @@ import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { getRankEmoji, getStreakEmoji, formatPoints } from "@/lib/utils";
-import { Copy, Check, Users, ArrowLeft, Loader2, Send, Trophy } from "lucide-react";
+import { Copy, Check, Users, ArrowLeft, Loader2, Send, Trophy, Trash2 } from "lucide-react";
 
 interface LeaderboardEntry {
   userId: string;
@@ -48,6 +48,7 @@ function AvatarFallbackText(name: string | null) {
 
 export default function GroupPage() {
   const { id } = useParams<{ id: string }>();
+  const router = useRouter();
   const [group, setGroup] = useState<GroupDetail | null>(null);
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [cheers, setCheers] = useState<Cheer[]>([]);
@@ -55,6 +56,19 @@ export default function GroupPage() {
   const [tab, setTab] = useState<"leaderboard" | "cheers">("leaderboard");
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
+  const [deleteConfirm, setDeleteConfirm] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+
+  async function handleDelete() {
+    setDeleting(true);
+    const res = await fetch(`/api/groups/${id}`, { method: "DELETE" });
+    if (res.ok) {
+      router.push("/groups");
+    } else {
+      setDeleting(false);
+      setDeleteConfirm(false);
+    }
+  }
 
   // Cheer form
   const [cheerTo, setCheerTo] = useState("");
@@ -126,7 +140,36 @@ export default function GroupPage() {
             {group.name.charAt(0)}
           </div>
           <div className="flex-1">
-            <h1 className="text-2xl font-black text-gray-800">{group.name}</h1>
+            <div className="flex items-center gap-3">
+              <h1 className="text-2xl font-black text-gray-800">{group.name}</h1>
+              {group.myRole === "admin" && !deleteConfirm && (
+                <button
+                  onClick={() => setDeleteConfirm(true)}
+                  className="text-gray-400 hover:text-red-500 transition-colors"
+                  title="Delete group"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+            {deleteConfirm && (
+              <div className="flex items-center gap-2 mt-1">
+                <span className="text-sm text-red-600 font-medium">Delete this group?</span>
+                <button
+                  onClick={handleDelete}
+                  disabled={deleting}
+                  className="text-xs px-2 py-0.5 rounded bg-red-500 text-white hover:bg-red-600 disabled:opacity-50 transition-colors"
+                >
+                  {deleting ? "Deleting…" : "Yes, delete"}
+                </button>
+                <button
+                  onClick={() => setDeleteConfirm(false)}
+                  className="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+            )}
             {group.description && <p className="text-gray-500 text-sm">{group.description}</p>}
             <div className="flex items-center gap-3 mt-2 flex-wrap">
               <div className="flex items-center gap-1.5 text-sm text-gray-500">
