@@ -62,6 +62,7 @@ export function mapGarminSport(sport: string): string {
   if (s.includes("cycl") || s.includes("bike") || s.includes("indoor cycling") || s.includes("virtual")) return "bike";
   if (s.includes("swim")) return "swim";
   if (s.includes("yoga") || s.includes("pilates") || s.includes("flexibility")) return "yoga";
+  if (s.includes("martial") || s.includes("jiu") || s.includes("bjj") || s.includes("grappl") || s.includes("judo") || s.includes("wrestl")) return "bjj";
   if (
     s.includes("strength") || s.includes("weight") || s.includes("cardio") ||
     s.includes("hiit") || s.includes("training") || s.includes("fitness")

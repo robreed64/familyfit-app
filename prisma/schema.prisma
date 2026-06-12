@@ -22,6 +22,7 @@ model User {
   accounts            Account[]
   sessions            Session[]
   activities          Activity[]
+  meals               Meal[]
   groupMembers        GroupMember[]
   sentCheers          Cheer[]             @relation("CheerSender")
   receivedCheers      Cheer[]             @relation("CheerReceiver")
@@ -154,6 +155,24 @@ model Activity {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, externalId])
+}
+
+model Meal {
+  id          String   @id @default(cuid())
+  userId      String
+  mealType    String   // "breakfast" | "lunch" | "dinner" | "snack"
+  description String
+  calories    Int?     // calories eaten
+  protein     Int?     // grams
+  carbs       Int?     // grams
+  fat         Int?     // grams
+  notes       String?
+  mealDate    DateTime @default(now())
+  createdAt   DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, mealDate])
 }
 
 model Challenge {

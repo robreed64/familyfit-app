@@ -29,6 +29,7 @@ export function calculatePoints(activity: {
       swim: 4,
       yoga: 2,
       strength: 3,
+      bjj: 3,
       other: 1,
       steps: 0,
     };
@@ -69,9 +70,22 @@ export function getActivityEmoji(type: string): string {
     swim: "🏊",
     yoga: "🧘",
     strength: "💪",
+    bjj: "🥋",
     other: "🏅",
   };
   return map[type] ?? "🏅";
+}
+
+export const MEAL_TYPES = ["breakfast", "lunch", "dinner", "snack"] as const;
+
+export function getMealEmoji(type: string): string {
+  const map: Record<string, string> = {
+    breakfast: "🍳",
+    lunch: "🥪",
+    dinner: "🍽️",
+    snack: "🍎",
+  };
+  return map[type] ?? "🍴";
 }
 
 export function formatDuration(minutes: number): string {

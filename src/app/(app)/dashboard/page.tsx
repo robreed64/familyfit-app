@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { StatsChart } from "@/components/dashboard/stats-chart";
 import { ActivityFeed } from "@/components/dashboard/activity-feed";
+import { NutritionSummary } from "@/components/dashboard/nutrition-summary";
 import { formatPoints, getRankEmoji, getActivityEmoji, getStreakEmoji } from "@/lib/utils";
 import { PlusCircle, Zap, Footprints, Flame, Trophy } from "lucide-react";
 
@@ -17,7 +18,7 @@ export default async function DashboardPage() {
   const userId = session.user.id!;
   const now = new Date();
 
-  const [user, todayStats, weekStats, recentActivities, myGroups] = await Promise.all([
+  const [user, todayStats, weekStats, recentActivities, myGroups, todayMeals] = await Promise.all([
     db.user.findUnique({
       where: { id: userId },
       select: { name: true, image: true },
@@ -45,6 +46,10 @@ export default async function DashboardPage() {
       },
       orderBy: { joinedAt: "desc" },
       take: 3,
+    }),
+    db.meal.findMany({
+      where: { userId, mealDate: { gte: startOfDay(now) } },
+      orderBy: { mealDate: "asc" },
     }),
   ]);
 
@@ -196,6 +201,21 @@ export default async function DashboardPage() {
                 </Link>
               ))
             )}
+          </CardContent>
+        </Card>
+
+        {/* Today's Nutrition */}
+        <Card>
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-base">Today&apos;s Nutrition</CardTitle>
+              <Link href="/log" className="text-xs text-purple-600 font-semibold hover:underline">
+                + Log meal
+              </Link>
+            </div>
+          </CardHeader>
+          <CardContent className="p-0 pb-4">
+            <NutritionSummary meals={todayMeals} />
           </CardContent>
         </Card>
       </div>

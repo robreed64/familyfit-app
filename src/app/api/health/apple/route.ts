@@ -111,6 +111,7 @@ function mapAppleWorkoutType(name: string): string {
   if (n.includes("cycl") || n.includes("bike") || n.includes("indoor cycling")) return "bike";
   if (n.includes("swim")) return "swim";
   if (n.includes("yoga") || n.includes("mindful")) return "yoga";
+  if (n.includes("martial") || n.includes("jiu") || n.includes("bjj") || n.includes("grappl") || n.includes("judo") || n.includes("wrestl")) return "bjj";
   if (n.includes("strength") || n.includes("functional") || n.includes("core") || n.includes("hiit")) return "strength";
   if (n.includes("walk") || n.includes("hik")) return "steps";
   return "other";

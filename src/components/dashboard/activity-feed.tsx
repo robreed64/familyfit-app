@@ -43,7 +43,9 @@ export function ActivityFeed({ activities }: { activities: Activity[] }) {
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-1.5">
-                <span className="font-semibold text-sm text-gray-700 capitalize">{a.type}</span>
+                <span className="font-semibold text-sm text-gray-700 capitalize">
+                  {a.type === "bjj" ? "BJJ" : a.type}
+                </span>
                 {src?.label && (
                   <span className={`text-xs px-1.5 py-0.5 rounded-full font-medium ${src.color}`}>
                     {src.label}

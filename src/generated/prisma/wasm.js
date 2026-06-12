@@ -229,6 +229,20 @@ exports.Prisma.ActivityScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.MealScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  mealType: 'mealType',
+  description: 'description',
+  calories: 'calories',
+  protein: 'protein',
+  carbs: 'carbs',
+  fat: 'fat',
+  notes: 'notes',
+  mealDate: 'mealDate',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.ChallengeScalarFieldEnum = {
   id: 'id',
   groupId: 'groupId',
@@ -292,6 +306,7 @@ exports.Prisma.ModelName = {
   GroupMember: 'GroupMember',
   GroupInvite: 'GroupInvite',
   Activity: 'Activity',
+  Meal: 'Meal',
   Challenge: 'Challenge',
   Cheer: 'Cheer',
   Badge: 'Badge',

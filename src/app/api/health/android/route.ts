@@ -126,6 +126,7 @@ function mapHealthConnectType(name: string): string {
   if (n.includes("BIKING") || n.includes("CYCLING") || n.includes("BIKE")) return "bike";
   if (n.includes("SWIMMING") || n.includes("SWIM")) return "swim";
   if (n.includes("YOGA")) return "yoga";
+  if (n.includes("MARTIAL") || n.includes("JIU") || n.includes("BJJ") || n.includes("GRAPPL") || n.includes("JUDO") || n.includes("WRESTL")) return "bjj";
   if (
     n.includes("STRENGTH") || n.includes("WEIGHT") || n.includes("RESISTANCE") ||
     n.includes("CALISTHENICS") || n.includes("HIIT") || n.includes("CROSSFIT")

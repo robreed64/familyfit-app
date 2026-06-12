@@ -176,6 +176,7 @@ function mapFitbitActivityType(name: string): string {
   if (n.includes("bike") || n.includes("cycl") || n.includes("ride")) return "bike";
   if (n.includes("swim")) return "swim";
   if (n.includes("yoga")) return "yoga";
+  if (n.includes("martial") || n.includes("jiu") || n.includes("bjj") || n.includes("grappl") || n.includes("judo") || n.includes("wrestl")) return "bjj";
   if (n.includes("weight") || n.includes("strength") || n.includes("lift")) return "strength";
   if (n.includes("walk")) return "steps";
   return "other";
