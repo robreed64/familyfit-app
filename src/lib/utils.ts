@@ -10,6 +10,38 @@ export function generateJoinCode(): string {
   return nanoid(8).toUpperCase();
 }
 
+export const EXERCISE_TYPES = [
+  { value: "steps", label: "Steps" },
+  { value: "run", label: "Run" },
+  { value: "bike", label: "Bike" },
+  { value: "swim", label: "Swim" },
+  { value: "yoga", label: "Yoga" },
+  { value: "pilates", label: "Pilates" },
+  { value: "strength", label: "Strength Training" },
+  { value: "bjj", label: "BJJ" },
+  { value: "other", label: "Other" },
+];
+
+// NEAT = Non-Exercise Activity Thermogenesis: everyday movement
+export const NEAT_TYPES = [
+  { value: "laundry", label: "Laundry" },
+  { value: "vacuuming", label: "Vacuum / Sweep / Mop" },
+  { value: "cleaning", label: "Cleaning" },
+  { value: "gardening", label: "Gardening" },
+  { value: "yardwork", label: "Yard Work (mow / rake / shovel)" },
+  { value: "dogwalk", label: "Dog Walk" },
+  { value: "play", label: "Play with Kids" },
+  { value: "cooking", label: "Cooking" },
+  { value: "errands", label: "Errands / Groceries" },
+  { value: "diy", label: "DIY / Home Repair" },
+];
+
+export function getActivityLabel(type: string): string {
+  const match = [...EXERCISE_TYPES, ...NEAT_TYPES].find((t) => t.value === type);
+  if (match) return match.label;
+  return type.charAt(0).toUpperCase() + type.slice(1);
+}
+
 export function calculatePoints(activity: {
   type: string;
   steps?: number | null;
@@ -28,10 +60,21 @@ export function calculatePoints(activity: {
       bike: 2,
       swim: 4,
       yoga: 2,
+      pilates: 2,
       strength: 3,
       bjj: 3,
       other: 1,
       steps: 0,
+      laundry: 1,
+      vacuuming: 1,
+      cleaning: 1,
+      gardening: 1,
+      yardwork: 1,
+      dogwalk: 1,
+      play: 1,
+      cooking: 1,
+      errands: 1,
+      diy: 1,
     };
     const multiplier = activityMultipliers[activity.type] ?? 1;
     points += activity.duration * multiplier;
@@ -69,9 +112,20 @@ export function getActivityEmoji(type: string): string {
     bike: "🚴",
     swim: "🏊",
     yoga: "🧘",
+    pilates: "🤸",
     strength: "💪",
     bjj: "🥋",
     other: "🏅",
+    laundry: "🧺",
+    vacuuming: "🧹",
+    cleaning: "🧽",
+    gardening: "🌱",
+    yardwork: "🍂",
+    dogwalk: "🐕",
+    play: "⚽",
+    cooking: "🍳",
+    errands: "🛒",
+    diy: "🔧",
   };
   return map[type] ?? "🏅";
 }

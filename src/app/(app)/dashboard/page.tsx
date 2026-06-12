@@ -9,6 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { StatsChart } from "@/components/dashboard/stats-chart";
 import { ActivityFeed } from "@/components/dashboard/activity-feed";
 import { NutritionSummary } from "@/components/dashboard/nutrition-summary";
+import { calculateStreak } from "@/lib/badges";
 import { formatPoints, getRankEmoji, getActivityEmoji, getStreakEmoji } from "@/lib/utils";
 import { PlusCircle, Zap, Footprints, Flame, Trophy } from "lucide-react";
 
@@ -53,27 +54,7 @@ export default async function DashboardPage() {
     }),
   ]);
 
-  // Calculate streak
-  const allActivityDays = await db.activity.findMany({
-    where: { userId },
-    select: { activityDate: true },
-    orderBy: { activityDate: "desc" },
-    distinct: ["activityDate"],
-  });
-
-  const uniqueDays = Array.from(
-    new Set(allActivityDays.map((a) => format(a.activityDate, "yyyy-MM-dd")))
-  ).sort((a, b) => b.localeCompare(a));
-
-  let streak = 0;
-  const checkDate = new Date();
-  checkDate.setHours(0, 0, 0, 0);
-  for (const day of uniqueDays) {
-    if (day === format(checkDate, "yyyy-MM-dd")) {
-      streak++;
-      checkDate.setDate(checkDate.getDate() - 1);
-    } else break;
-  }
+  const streak = await calculateStreak(userId);
 
   const firstName = user?.name?.split(" ")[0] ?? "Champ";
   const hour = now.getHours();

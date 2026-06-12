@@ -4,22 +4,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { getActivityEmoji, calculatePoints } from "@/lib/utils";
+import { getActivityEmoji, calculatePoints, EXERCISE_TYPES, NEAT_TYPES } from "@/lib/utils";
 import { Loader2, Zap } from "lucide-react";
-
-const ACTIVITY_TYPES = [
-  { value: "steps", label: "Steps" },
-  { value: "run", label: "Run" },
-  { value: "bike", label: "Bike" },
-  { value: "swim", label: "Swim" },
-  { value: "yoga", label: "Yoga" },
-  { value: "strength", label: "Strength Training" },
-  { value: "bjj", label: "BJJ" },
-  { value: "other", label: "Other" },
-];
 
 export function ActivityForm() {
   const router = useRouter();
@@ -103,11 +92,22 @@ export function ActivityForm() {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {ACTIVITY_TYPES.map((t) => (
-                  <SelectItem key={t.value} value={t.value}>
-                    {getActivityEmoji(t.value)} {t.label}
-                  </SelectItem>
-                ))}
+                <SelectGroup>
+                  <SelectLabel>Exercise</SelectLabel>
+                  {EXERCISE_TYPES.map((t) => (
+                    <SelectItem key={t.value} value={t.value}>
+                      {getActivityEmoji(t.value)} {t.label}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+                <SelectGroup>
+                  <SelectLabel>Everyday (NEAT)</SelectLabel>
+                  {NEAT_TYPES.map((t) => (
+                    <SelectItem key={t.value} value={t.value}>
+                      {getActivityEmoji(t.value)} {t.label}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
               </SelectContent>
             </Select>
           </div>

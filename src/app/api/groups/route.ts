@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { generateJoinCode } from "@/lib/utils";
+import { checkAndAwardBadges } from "@/lib/badges";
 
 export async function GET() {
   const session = await auth();
@@ -49,6 +50,8 @@ export async function POST(req: Request) {
       },
     },
   });
+
+  await checkAndAwardBadges(session.user.id);
 
   return NextResponse.json(group, { status: 201 });
 }

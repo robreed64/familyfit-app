@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { calculatePoints } from "@/lib/utils";
+import { checkAndAwardBadges } from "@/lib/badges";
 import { parseFitFile, mapGarminSport } from "@/lib/fit-parser";
 import { format } from "date-fns";
 
@@ -86,6 +87,8 @@ export async function POST(req: Request) {
   }
 
   skipped = files.length - imported - errors.length;
+
+  if (imported > 0) await checkAndAwardBadges(userId);
 
   return NextResponse.json({ imported, skipped, errors }, { status: errors.length && !imported ? 400 : 200 });
 }

@@ -1,5 +1,6 @@
 import { db } from "@/lib/db";
 import { calculatePoints } from "@/lib/utils";
+import { checkAndAwardBadges } from "@/lib/badges";
 import { format, subDays } from "date-fns";
 
 const FITBIT_TOKEN_URL = "https://api.fitbit.com/oauth2/token";
@@ -167,6 +168,8 @@ export async function syncFitbitActivities(userId: string, daysBack = 7): Promis
     data: { lastSynced: new Date() },
   });
 
+  if (imported > 0) await checkAndAwardBadges(userId);
+
   return imported;
 }
 
@@ -175,6 +178,7 @@ function mapFitbitActivityType(name: string): string {
   if (n.includes("run") || n.includes("jog")) return "run";
   if (n.includes("bike") || n.includes("cycl") || n.includes("ride")) return "bike";
   if (n.includes("swim")) return "swim";
+  if (n.includes("pilates")) return "pilates";
   if (n.includes("yoga")) return "yoga";
   if (n.includes("martial") || n.includes("jiu") || n.includes("bjj") || n.includes("grappl") || n.includes("judo") || n.includes("wrestl")) return "bjj";
   if (n.includes("weight") || n.includes("strength") || n.includes("lift")) return "strength";

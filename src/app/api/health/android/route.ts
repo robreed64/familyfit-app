@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { calculatePoints } from "@/lib/utils";
+import { checkAndAwardBadges } from "@/lib/badges";
 
 export async function GET() {
   return NextResponse.json({
@@ -115,6 +116,8 @@ export async function POST(req: Request) {
     imported++;
   }
 
+  if (imported > 0) await checkAndAwardBadges(userId);
+
   return NextResponse.json({ imported, date });
 }
 
@@ -125,6 +128,7 @@ function mapHealthConnectType(name: string): string {
   if (n.includes("RUNNING") || n.includes("RUN") || n.includes("JOGGING")) return "run";
   if (n.includes("BIKING") || n.includes("CYCLING") || n.includes("BIKE")) return "bike";
   if (n.includes("SWIMMING") || n.includes("SWIM")) return "swim";
+  if (n.includes("PILATES")) return "pilates";
   if (n.includes("YOGA")) return "yoga";
   if (n.includes("MARTIAL") || n.includes("JIU") || n.includes("BJJ") || n.includes("GRAPPL") || n.includes("JUDO") || n.includes("WRESTL")) return "bjj";
   if (

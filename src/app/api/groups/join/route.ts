@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { checkAndAwardBadges } from "@/lib/badges";
 
 export async function POST(req: Request) {
   const session = await auth();
@@ -21,6 +22,8 @@ export async function POST(req: Request) {
   await db.groupMember.create({
     data: { userId: session.user.id, groupId: group.id, role: "member" },
   });
+
+  await checkAndAwardBadges(session.user.id);
 
   return NextResponse.json({ groupId: group.id, groupName: group.name });
 }

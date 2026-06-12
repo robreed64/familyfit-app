@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { calculatePoints } from "@/lib/utils";
+import { checkAndAwardBadges } from "@/lib/badges";
 
 export async function GET(req: Request) {
   const session = await auth();
@@ -45,6 +46,8 @@ export async function POST(req: Request) {
       points,
     },
   });
+
+  await checkAndAwardBadges(session.user.id);
 
   return NextResponse.json(activity, { status: 201 });
 }
